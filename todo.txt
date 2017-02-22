@@ -1,0 +1,10 @@
+To do:
+
+1) Dokumentation og kommentarer
+2) Mount server
+3) Lav hjemmeside
+4) Udvid modellering
+	a) Bayesian modellering
+	b) Hukommelse inkludering
+	c) Udvælg responsfunktion posts omhyggeligt
+	d) Tilpase responsfunktion til tid på dagen
