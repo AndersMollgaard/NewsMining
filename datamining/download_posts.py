@@ -110,8 +110,11 @@ def save_post(post,timestamp,page):
     filename = '%s_ID=%s.p' %(post['created_time'][:-5].replace('-','').replace(':',''),post['id'])
                     
     #If the post file exists
-    if os.path.isfile(filename): 
-        post_dic = pickle.load( open(filename,'rb') )
+    if os.path.isfile(filename):
+	try: 
+            post_dic = pickle.load( open(filename,'rb') )
+        except:
+            print 'Following file is broken:', page, filename
         try:
             post_dic['comments'] = np.append(post_dic['comments'], post['comments']['summary']['total_count'])
         except:
