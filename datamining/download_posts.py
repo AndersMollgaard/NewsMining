@@ -5,35 +5,20 @@ Created on Sat Nov  5 08:15:36 2016
 @author: amollgaard
 """
 
+from ..lib import newsmine as nm
 import time
 import requests
-import datetime
-import pytz
 import platform
 import os
 import pickle
 import numpy as np
 
-################ Server definition needs #######################
-
-def time_to_epoch(t='2011-12-21 00:00:00',form = "%Y-%m-%d %H:%M:%S",tz='utc'):
-    '''New York: EST5EDT. Copenhagen: Europe/Copenhagen.'''
-
-    date_aware = datetime.datetime.strptime(t, form).replace(tzinfo=pytz.timezone(tz))
-    pytz_object = pytz.timezone(tz)
-    time_shift = int(pytz_object.normalize(date_aware).strftime('%z')[:-2])
-    date_utc = datetime.datetime.strptime(t, form)
-    epoch = datetime.datetime(1970,1,1)
-    dt = date_utc - epoch
-    seconds = dt.total_seconds() - time_shift * 3600
-
-    return seconds
-
 ################### Authorize ###################################
-
+print 'Access token wil expire 06/03/2017 14:56 Copenhagen'
 app_id = '176850349063593'
 app_secret = '7f16661417c8ae95e34a02c60f10f3bc'
 access_token = 'EAACg2C47ZCakBAMEuSj1egXe1YVaUaT1Qe9ZBj80b5GDuigeDeRYlqZCmCcUVHPiK0EUM8xFQuoRZA4Y8su4Q3k2q79X7y8ZBQZB0AfxMNCVm1m3BNn2P5cb87HM572ZCSk3GlztOp1U5bDZA6AMuVVt'
+#graph = facebook.GraphAPI(access_token,version='2.7')
 
 ########### Variables #############################
 
@@ -46,19 +31,7 @@ if platform.node() == 'kaoslx07.biocmplx.nbi.dk':
 if platform.node() == 'UbuntuServer1':
     data_directory = '/home/asparagus/Data/FacebookMining/posts'
 
-pages_dic = { 
-            'danish': 
-    ['ditbt','ekstrabladet','metroxpress','tv2nyhederne','jyllandsposten','finans.dk','berlingskebusiness','lokalavisen.dk','nordjyskemedier','stiftstidende','fyensdk','DRNyheder'],
-            'english': 
-    ['DailyMail','dailymirror','theguardian','TheIndependentOnline','bbcnews','MetroUK'],
-            'swedish':
-    ['aftonbladet', 'expressen'],
-            'norwegian':
-    ['vgnett','NRK',],
-            'american':
-    ['nytimes', 'washingtonpost', 'NYDailyNews', 'HuffingtonPost', 'cnn', 'ABCNews', 'NBCNews', 'mashable']
-}
-pages = [page for sublist in pages_dic.values() for page in sublist]
+pages = nm.pages
 post_fields = ['id','created_time','description','from{id,name,fan_count,link,website,location{city,latitude,longitude}}','link','message','shares','reactions.limit(0).summary(1)','comments.limit(0).summary(1)']
 post_limit = 100
 page_limit = 10
@@ -158,7 +131,7 @@ def save_post(post,timestamp,page):
         post_dic = post
         try:
             time_string = post['created_time']
-            timestamp_created = int( time_to_epoch(time_string,"%Y-%m-%dT%H:%M:%S+0000",'UTC') )
+            timestamp_created = int( nm.time_to_epoch(time_string,"%Y-%m-%dT%H:%M:%S+0000",'UTC') )
             post_dic['created_time'] = {'time_string':time_string, 'timestamp':timestamp_created}
         except:
             post_dic['created_time'] = {'time_string':False, 'timestamp':False}
@@ -177,8 +150,7 @@ def save_post(post,timestamp,page):
         post_dic['timestamps'] = np.array([ timestamp ])
     
     #Save post_dic to file
-    with open(filename, 'wb') as f:
-        pickle.dump(post_dic, f)
+    pickle.dump(post_dic, open(filename, 'wb') )
     
     
 def save_posts(posts_dic):
@@ -246,8 +218,4 @@ def update_continuously(pages=pages,fields=post_fields,post_limit=post_limit,pag
         last_update_time = time.time()
         update(pages,fields,post_limit,page_limit)
 
-############################################
-
-if __name__ == "__main__":
-    update_continuously()
         
