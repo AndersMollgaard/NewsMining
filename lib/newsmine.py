@@ -19,6 +19,9 @@ import pytz
 if platform.node() == 'Asparagus':
     post_directory = '/home/amollgaard/Data/FacebookMining/posts'
     article_directory = '/home/amollgaard/Data/FacebookMining/articles'    
+if platform.node() == 'UbuntuServer1':
+    post_directory = '/home/asparagus/Data/FacebookMining/posts'
+    article_directory = '/home/asparagus/Data/FacebookMining/articles'
 
 # Standard filters and variables
 filter_standard = {'dt_max':120,'length':15,'passed_min':36000}
