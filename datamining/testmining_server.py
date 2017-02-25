@@ -26,8 +26,7 @@ def time_to_epoch(t='2011-12-21 00:00:00',form = "%Y-%m-%d %H:%M:%S",tz='utc'):
     epoch = datetime.datetime(1970,1,1)
     dt = date_utc - epoch
     seconds = dt.total_seconds() - time_shift * 3600
-#    print time_shift
-#    print seconds
+
     return seconds
 
 ################### Authorize ###################################

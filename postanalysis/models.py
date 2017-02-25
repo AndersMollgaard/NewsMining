@@ -6,9 +6,9 @@ Created on Tue Jan 10 09:28:26 2017
 """
 
 import numpy as np
-import tools as ts
+from ..lib import newsmine as nm
 
-########### ModleX #########################
+########### Model X #########################
 
 class Model1():
     
@@ -42,10 +42,10 @@ class SeismicSimple():
     
     
     def fit(self, t, x, fan_count, shares):
-        t_halfway = np.concatenate((t[:1], ts.halfway(t)))
+        t_halfway = np.concatenate((t[:1], nm.halfway(t)))
         response_input = t[-1] - t_halfway
         response_array = np.interp(response_input, self.response_time, self.response_function)
-        shares_new = ts.diff(shares)
+        shares_new = nm.diffx(shares)
         degree_new = self.followers_avg * shares_new
         degree_new = np.concatenate((np.array([fan_count]), degree_new))
         self.degree_sum = fan_count + self.followers_avg * shares[-1]

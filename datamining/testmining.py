@@ -5,10 +5,8 @@ Created on Sat Nov  5 08:15:36 2016
 @author: amollgaard
 """
 
-from NewsMining.lib import newsmine as nm
-import facebook
+from ..lib import newsmine as nm
 import time
-import tools as ts
 import requests
 import platform
 import os
@@ -30,6 +28,8 @@ if platform.node() == 'Asparagus':
     data_directory = '/home/amollgaard/Data/FacebookMining/posts'
 if platform.node() == 'kaoslx07.biocmplx.nbi.dk':
     data_directory = '/home.lx07/cmplx/amoellga/Data/FacebookMining/posts'
+if platform.node() == 'UbuntuServer1':
+    data_directory = '/home/asparagus/Data/FacebookMining/posts'
 
 pages = nm.pages
 post_fields = ['id','created_time','description','from{id,name,fan_count,link,website,location{city,latitude,longitude}}','link','message','shares','reactions.limit(0).summary(1)','comments.limit(0).summary(1)']
@@ -131,7 +131,7 @@ def save_post(post,timestamp,page):
         post_dic = post
         try:
             time_string = post['created_time']
-            timestamp_created = int( ts.time_to_epoch(time_string,"%Y-%m-%dT%H:%M:%S+0000",'UTC') )
+            timestamp_created = int( nm.time_to_epoch(time_string,"%Y-%m-%dT%H:%M:%S+0000",'UTC') )
             post_dic['created_time'] = {'time_string':time_string, 'timestamp':timestamp_created}
         except:
             post_dic['created_time'] = {'time_string':False, 'timestamp':False}
@@ -220,6 +220,6 @@ def update_continuously(pages=pages,fields=post_fields,post_limit=post_limit,pag
 
 ############################################
 
-#if __name__ == "__main__":
-#    update_continuously()
+if __name__ == "__main__":
+    update_continuously()
         

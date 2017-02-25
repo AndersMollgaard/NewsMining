@@ -5,7 +5,8 @@ Created on Tue Jan 10 10:05:02 2017
 @author: amollgaard
 """
 
-from NewsMining.lib import newsmine as nm
+from ..lib import newsmine as nm
+from ..datamining import testmining
 from timezonefinder import TimezoneFinder
 import numpy as np
 import cPickle as pickle

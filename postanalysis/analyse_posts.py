@@ -5,8 +5,8 @@ Created on Thu Nov 17 11:06:44 2016
 @author: amollgaard
 """
 
-from NewsMining.lib import newsmine as nm
-from NewsMining.postanalysis import models
+from ..lib import newsmine as nm
+from ..postanalysis import models
 import numpy as np
 import cPickle as pickle
 from matplotlib import pyplot as plt

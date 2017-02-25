@@ -7,7 +7,7 @@ Created on Thu Jan  5 08:53:49 2017
 
 import pickle
 from newspaper import Article, Config
-from NewsMining.lib import facemine as fm
+from ..lib import newsmine as nm
 import os
 import testmining
 
@@ -75,7 +75,7 @@ def save_articles(pages=testmining.pages):
     
     article_downloads = get_article_downloads()
     skip_dic = article_downloads['download_success']
-    for page,path,post in fm.pagesposts_iter(pages,filters={},skip_dic=skip_dic):
+    for page,path,post in nm.pagesposts_iter(pages,filters={},skip_dic=skip_dic):
         filename = path.split('/')[-1]
         if 'link' in post:
             url = post['link']

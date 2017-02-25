@@ -9,8 +9,9 @@ import platform
 import os
 import cPickle as pickle
 import numpy as np
-import tools as ts
 import itertools
+import datetime
+import pytz
 
 ################### Variables #######################
 
@@ -63,6 +64,32 @@ def load_response_function():
     with open('/home/amollgaard/Dropbox/Projekter/NewsMining/objects/response_function.p','rb') as f:
         response_time,response_function,response_error = pickle.load(f)
     return response_time,response_function,response_error
+
+
+############### Misc #####################################
+
+def diffx(x):
+    x = np.array(x)
+    return x[1:] - x[:-1]
+    
+
+def halfway(bins):
+    bins = np.array(bins)
+    return 0.5*(bins[1:]+bins[:-1])
+    
+
+def time_to_epoch(t='2011-12-21 00:00:00',form = "%Y-%m-%d %H:%M:%S",tz='utc'):
+    '''New York: EST5EDT. Copenhagen: Europe/Copenhagen.'''
+
+    date_aware = datetime.datetime.strptime(t, form).replace(tzinfo=pytz.timezone(tz))
+    pytz_object = pytz.timezone(tz)
+    time_shift = int(pytz_object.normalize(date_aware).strftime('%z')[:-2])
+    date_utc = datetime.datetime.strptime(t, form)
+    epoch = datetime.datetime(1970,1,1)
+    dt = date_utc - epoch
+    seconds = dt.total_seconds() - time_shift * 3600
+
+    return seconds
     
 
 ############ Filter function ############################
@@ -173,14 +200,14 @@ class pageposts_iter:
         # Ignore posts outside timeframe if timeframe stated. Create list with paths of files
         if timestamp_min:
             if type(timestamp_min) == str:
-                timestamp_min = ts.time_to_epoch(timestamp_min,"%Y%m%dT%H%M%S",'utc')
+                timestamp_min = time_to_epoch(timestamp_min,"%Y%m%dT%H%M%S",'utc')
             if type(timestamp_max) == str:
-                timestamp_max = ts.time_to_epoch(timestamp_max,"%Y%m%dT%H%M%S",'utc')
+                timestamp_max = time_to_epoch(timestamp_max,"%Y%m%dT%H%M%S",'utc')
             if not timestamp_max:
                 timestamp_max = timestamp_min + 86400
             self.post_paths = [ os.path.join(self.dir, filename) for filename in os.listdir(self.dir) \
             if os.path.isfile(os.path.join(self.dir, filename)) and timestamp_min <= \
-            ts.time_to_epoch(filename[:15],"%Y%m%dT%H%M%S",'utc') <= timestamp_max  ]
+            time_to_epoch(filename[:15],"%Y%m%dT%H%M%S",'utc') <= timestamp_max  ]
         else:
             self.post_paths = [ os.path.join(self.dir, filename) for filename in os.listdir(self.dir) \
             if os.path.isfile(os.path.join(self.dir, filename)) ]
