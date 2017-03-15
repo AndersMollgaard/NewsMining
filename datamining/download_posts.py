@@ -14,10 +14,10 @@ import pickle
 import numpy as np
 
 ################### Authorize ###################################
-print 'Access token wil expire 06/03/2017 14:56 Copenhagen'
+print 'Access token wil expire 2017-05-14'
 app_id = '176850349063593'
 app_secret = '7f16661417c8ae95e34a02c60f10f3bc'
-access_token = 'EAACg2C47ZCakBAMEuSj1egXe1YVaUaT1Qe9ZBj80b5GDuigeDeRYlqZCmCcUVHPiK0EUM8xFQuoRZA4Y8su4Q3k2q79X7y8ZBQZB0AfxMNCVm1m3BNn2P5cb87HM572ZCSk3GlztOp1U5bDZA6AMuVVt'
+access_token = 'EAACg2C47ZCakBAJWE9MJZAWaNSj2v4kIoQLuQQ2GVlluMY21jZB9gIfDNjSe7ZCJPmZBK2w27Ec5OHVWZC0G22ZCI6ZBigp2ih7tnb6fjE7zwkySnZBnkk9CCbCesBAjhrfGCX9zG5ApYM2DYNlycnE67Cyo14f0aX99W2r7ZA8kxaJJq4GS4dY67cMQlyVJtc39gZD'
 #graph = facebook.GraphAPI(access_token,version='2.7')
 
 ########### Variables #############################
@@ -45,11 +45,13 @@ page_limit = 10
 
 
 def extend_token(access_token):
-    
+    import facebook
+    from datetime import datetime,timedelta
     graph = facebook.GraphAPI(access_token)
-    extended_token = graph.extend_access_token(app_id, app_secret)
-    
-    return extended_token
+    d = graph.extend_access_token(app_id, app_secret)
+    expires = datetime.now() + timedelta(seconds=int(d['expires']))
+    print expires
+    return d['access_token']
     
 
 class cd:

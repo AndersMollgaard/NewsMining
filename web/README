@@ -1,6 +1,0 @@
-This is my attempt at a web-server setup with Django and apache2. I have followed the following guide 
-
-https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-apache-and-mod_wsgi-on-ubuntu-14-04
-
-although instead of using the diirecty ~/myproject, I have used ~/Projects/NewsMining/web. Also the myprojectenv directory is instead called  webenv.
-
